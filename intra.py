@@ -9,9 +9,8 @@
 import numpy as np
 import pandas as pd
 import re
-import csv
 import os
-import pickle
+
 
 from _datetime import datetime
 from sklearn.preprocessing import OneHotEncoder
@@ -20,9 +19,40 @@ api_journal = pd.read_csv('api_journal11-13-17.csv', encoding='latin1')
 api_price = pd.read_csv('api_price11-13-17.csv', encoding='latin1')
 estimated_article_influence = pd.read_csv('estimated-article-influence-scores-2015.csv', encoding='latin1')
 
+# Copy to keep the original data if needed
+api_journal_original = api_journal.copy()
+api_price_original = api_price.copy()
+estimated_article_influence_original = estimated_article_influence.copy()
+
+# Transform text columns to numerical categories
+# api journal
+api_journal['journal_name'] = api_journal['journal_name'].astype('category')
+api_journal['pub_name'] = api_journal['pub_name'].astype('category')
+
+api_journal.dtypes.keys()[0]
+cat_columns = api_journal.select_dtypes('category').columns
+api_journal[cat_columns] = api_journal[cat_columns].apply(lambda x: x.cat.codes)
+
+# api price
+# api_journal['journal_name'] = api_journal['journal_name'].astype('category')
+# api_journal['pub_name'] = api_journal['pub_name'].astype('category')
+#
+# api_journal.dtypes.keys()[0]
+# cat_columns = api_journal.select_dtypes('category').columns
+# api_journal[cat_columns] = api_journal[cat_columns].apply(lambda x: x.cat.codes)
+
+# estimated article influeece
+estimated_article_influence['journal_name'] = estimated_article_influence['journal_name'].astype('category')
+estimated_article_influence['pub_name'] = estimated_article_influence['pub_name'].astype('category')
+
+estimated_article_influence.dtypes.keys()[0]
+cat_columns = estimated_article_influence.select_dtypes('category').columns
+estimated_article_influence[cat_columns] = estimated_article_influence[cat_columns].apply(lambda x: x.cat.codes)
+
 # %%
 """
 # Q1
+## a)
 """
 
 # %%
@@ -108,5 +138,22 @@ api_journal.duplicated()
 
 # %%
 
-api_journal.corr()
+# Transform text columns to numerical categories
+api_journal['journal_name'] = api_journal['journal_name'].astype('category')
+api_journal['pub_name'] = api_journal['pub_name'].astype('category')
+
+api_journal.dtypes.keys()[0]
+
+cat_columns = api_journal.select_dtypes('category').columns
+
+api_journal[cat_columns] = api_journal[cat_columns].apply(lambda x: x.cat.codes)
+
+print('e')
+
+# %%
+"""
+# Q2
+## a)
+"""
+
 
